@@ -1,0 +1,49 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Usuario {
+  id        Int       @id @default(autoincrement())
+  // Adicione aqui os outros campos do usuário, exemplo:
+  // nome      String
+  // email     String    @unique
+  // senha     String
+  // criadoEm  DateTime  @default(now())
+
+  clientes  Cliente[]
+  processos Processo[]
+
+  @@map("usuarios")
+}
+
+model Cliente {
+  id        Int      @id @default(autoincrement())
+  // Adicione aqui os campos do cliente, exemplo:
+  // nome      String
+  // cpf       String?  @unique
+  // telefone  String?
+
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  usuarioId Int
+
+  @@map("clientes")
+}
+
+model Processo {
+  id        Int      @id @default(autoincrement())
+  // Adicione aqui os campos do processo, exemplo:
+  // numero    String   @unique
+  // titulo    String
+  // status    String
+
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  usuarioId Int
+
+  @@map("processos")
+}
